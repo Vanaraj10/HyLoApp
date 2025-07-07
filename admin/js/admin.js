@@ -1,3 +1,57 @@
+// --- AUTH REDIRECT LOGIC ---
+async function requireAdminAuth() {
+  const res = await fetch('../api/admin_auth.php');
+  const json = await res.json();
+  if (!json.logged_in) {
+    window.location.href = 'login.html';
+    return false;
+  }
+  return true;
+}
+
+async function adminLogout() {
+  await fetch('../api/admin_auth.php', { method: 'DELETE' });
+  window.location.href = 'login.html';
+}
+
+// --- START APPLICATION ---
+function initializeApp() {
+  loadCategories();
+  loadBrands();
+  loadProducts();
+  // Attach event listeners
+  document.getElementById("addCategoryBtn")?.addEventListener("click", addCategory);
+  document.getElementById("addBrandBtn")?.addEventListener("click", addBrand);
+  document.getElementById("productForm")?.addEventListener("submit", handleProductSubmit);
+  document.getElementById("productSearch")?.addEventListener("input", handleSearch);
+  // Collapsible brand section
+  document.getElementById("brandSectionToggle")?.addEventListener("click", toggleBrandSection);
+}
+
+document.addEventListener("DOMContentLoaded", initializeApp);
+
+// --- Password Change (works on dashboard) ---
+async function changeAdminPassword() {
+  const current_password = document.getElementById('currentPassword').value;
+  const new_password = document.getElementById('newPassword').value;
+  const res = await fetch('../api/admin_change_password.php', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({current_password, new_password})
+  });
+  const json = await res.json();
+  const msg = document.getElementById('adminChangePasswordMsg');
+  if (json.success) {
+    msg.style.color = 'green';
+    msg.textContent = 'Password changed successfully!';
+  } else {
+    msg.style.color = 'red';
+    msg.textContent = json.error || 'Failed to change password';
+  }
+}
+
+// Expose logout for dashboard
+window.adminLogout = adminLogout;
 
 // --- Helper to convert file to base64 ---
 async function fileToBase64(file) {
@@ -824,19 +878,3 @@ function showToast(message, type = "info") {
 
 // Expose showToast globally for admin panel usage
 window.showToast = showToast;
-
-// --- START APPLICATION ---
-function initializeApp() {
-  loadCategories();
-  loadBrands();
-  loadProducts();
-  // Attach event listeners
-  document.getElementById("addCategoryBtn")?.addEventListener("click", addCategory);
-  document.getElementById("addBrandBtn")?.addEventListener("click", addBrand);
-  document.getElementById("productForm")?.addEventListener("submit", handleProductSubmit);
-  document.getElementById("productSearch")?.addEventListener("input", handleSearch);
-  // Collapsible brand section
-  document.getElementById("brandSectionToggle")?.addEventListener("click", toggleBrandSection);
-}
-
-document.addEventListener("DOMContentLoaded", initializeApp);

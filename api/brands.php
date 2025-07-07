@@ -5,10 +5,20 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // brands.php - RESTful API for brands (base64 logo)
+session_start();
 header('Content-Type: application/json');
 require_once 'db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+// Only allow POST, PUT, DELETE if admin is logged in
+if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
+    if (!isset($_SESSION['admin_logged_in']) || !$_SESSION['admin_logged_in']) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Not authenticated']);
+        exit;
+    }
+}
 
 function send_json_error($message, $code = 500) {
     http_response_code($code);

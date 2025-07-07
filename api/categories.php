@@ -1,9 +1,19 @@
 <?php
 // categories.php - RESTful API for categories
+session_start();
 header('Content-Type: application/json');
 require_once 'db.php';
 
 $method = $_SERVER['REQUEST_METHOD'];
+
+// Only allow POST, PUT, DELETE if admin is logged in
+if (in_array($method, ['POST', 'PUT', 'DELETE'])) {
+    if (!isset($_SESSION['admin_logged_in']) || !$_SESSION['admin_logged_in']) {
+        http_response_code(401);
+        echo json_encode(['success' => false, 'error' => 'Not authenticated']);
+        exit;
+    }
+}
 
 switch ($method) {
     case 'GET':
