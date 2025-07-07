@@ -467,6 +467,11 @@ small {
   gap: 1rem;
   flex-wrap: wrap;
 }
+.footer-info {
+  font-size: 1rem;
+  opacity: 0.8;
+  margin-top: 1.2rem;
+}
 
 .filter-group label {
   font-family: var(--font-family-primary);
@@ -2879,6 +2884,13 @@ select:focus {
     right: 3.5rem;
     width: 36px;
     height: 36px;
+  }
+  .footer-info {
+    font-size: 0.8rem;
+    margin-top: 0;
+  }
+  .footer-content {
+    margin-bottom: 0.2rem;
   }
   
   .modal-nav-btn {
