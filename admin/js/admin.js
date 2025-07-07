@@ -105,7 +105,7 @@ async function addCategory() {
     if (!json.success) throw new Error("Failed to add category");
     input.value = "";
     await loadCategories();
-    categorySelect.value = json.id;
+    window.showToast && showToast("Category added successfully!", "success");
   } catch (error) {
     console.error("Error adding category:", error);
     alert("Error adding category: " + error.message);
@@ -128,6 +128,7 @@ async function deleteCategory(id) {
     const json = await res.json();
     if (!json.success) throw new Error("Failed to delete category");
     await loadCategories();
+    window.showToast && showToast("Category deleted successfully!", "success");
   } catch (error) {
     console.error("Error deleting category:", error);
     alert("Error deleting category: " + error.message);
@@ -146,6 +147,7 @@ async function editCategory(id, currentName) {
     const json = await res.json();
     if (!json.success) throw new Error("Failed to update category");
     await loadCategories();
+    window.showToast && showToast("Category updated successfully!", "success");
   } catch (error) {
     console.error("Error updating category:", error);
     alert("Error updating category: " + error.message);
@@ -284,6 +286,7 @@ async function addBrand() {
     if (logoInput) logoInput.value = "";
     await loadBrands();
     brandSelect.value = json.id;
+    window.showToast && showToast("Brand added successfully!", "success");
   } catch (error) {
     console.error("Error adding brand:", error);
     alert("Error adding brand: " + error.message);
@@ -306,6 +309,7 @@ async function deleteBrand(id) {
     const json = await res.json();
     if (!json.success) throw new Error("Failed to delete brand");
     await loadBrands();
+    window.showToast && showToast("Brand deleted successfully!", "success");
   } catch (error) {
     console.error("Error deleting brand:", error);
     alert("Error deleting brand: " + error.message);
@@ -367,6 +371,7 @@ async function updateBrand() {
     document.getElementById("brandForm").style.display = "none";
     document.getElementById("addBrandForm").style.display = "flex";
     await loadBrands();
+    window.showToast && showToast("Brand updated successfully!", "success");
   } catch (error) {
     console.error("Error updating brand:", error);
     alert("Error updating brand: " + error.message);
@@ -427,32 +432,22 @@ async function loadProducts(page = 1, search = "") {
       .map(
         (product) => `
             <tr>
-                <td><img src="data:image/png;base64,${
-                  product.product_image
-                }" alt="${product.product_name}"></td>
+                <td><img src="data:image/png;base64,${product.product_image}" alt="${product.product_name}"></td>
                 <td><strong>${product.product_name}</strong></td>
                 <td><strong>₹${product.product_price}</strong></td>
                 <td>${product.product_discount || 0}%</td>
                 <td>${product.product_moq || 1}</td>
-                <td><span class="tag" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">${
-                  product.category_name || "N/A"
-                }</span></td>
-                <td><span class="tag brand-tag" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">${
-                  product.brand_name || "N/A"
-                }</span></td>
-                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="${
-                  product.product_description
-                }">${product.product_description}</td>
+                <td><span class="tag" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">${product.category_name || "N/A"}</span></td>
+                <td><span class="tag brand-tag" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">${product.brand_name || "N/A"}</span></td>
+                <td style="max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: normal;" title="${product.product_description}">
+                  ${formatDescriptionAsBullets(product.product_description)}
+                </td>
                 <td>
                     <div class="action-buttons">
-                        <button class="action-btn edit" onclick="editProduct(${
-                          product.id
-                        })">
+                        <button class="action-btn edit" onclick="editProduct(${product.id})">
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="action-btn delete" onclick="deleteProduct(${
-                          product.id
-                        })">
+                        <button class="action-btn delete" onclick="deleteProduct(${product.id})">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </div>
@@ -471,6 +466,14 @@ async function loadProducts(page = 1, search = "") {
     updatePagination();
     updateProductsInfo();
   }
+}
+
+// Helper to format description as bullet points for admin preview/table
+function formatDescriptionAsBullets(description) {
+  if (!description) return '<span style="color:#888">No description</span>';
+  const lines = description.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0);
+  if (lines.length === 0) return '<span style="color:#888">No description</span>';
+  return '<ul class="modal-description-list">' + lines.map(line => `<li>${line}</li>`).join('') + '</ul>';
 }
 
 function updatePagination() {
@@ -639,6 +642,7 @@ async function handleProductSubmit(e) {
     editingId = null;
     submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Product';
     await loadProducts();
+    window.showToast && showToast(editingId ? "Product updated successfully!" : "Product added successfully!", "success");
   } catch (err) {
     console.error("Error saving product:", err);
     alert("Error: " + err.message);
@@ -691,7 +695,7 @@ async function deleteProduct(id) {
     const json = await res.json();
     if (!json.success) throw new Error("Failed to delete product");
     await loadProducts();
-    alert("Product deleted successfully!");
+    window.showToast && showToast("Product deleted successfully!", "success");
   } catch (error) {
     console.error("Error deleting product:", error);
     alert("Error deleting product: " + error.message);
@@ -778,6 +782,70 @@ function clearPendingDeletions() {
 // Add these to window for console access
 window.viewPendingDeletions = viewPendingDeletions;
 window.clearPendingDeletions = clearPendingDeletions;
+
+// --- Toast Notifications ---
+function showToast(message, type = "info") {
+  // Create toast element
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `
+        <div class="toast-content">
+            <i class="fas ${
+              type === "success"
+                ? "fa-check-circle"
+                : type === "error"
+                ? "fa-exclamation-circle"
+                : "fa-info-circle"
+            }"></i>
+            <span>${message}</span>
+        </div>
+    `;
+
+  // Add toast styles
+  toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: ${
+          type === "success"
+            ? "#10b981"
+            : type === "error"
+            ? "#ef4444"
+            : "#3b82f6"
+        };
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 10002;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: var(--font-family-primary, 'Inter', Arial, sans-serif);
+        font-size: 0.875rem;
+        font-weight: 500;
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+
+  document.body.appendChild(toast);
+
+  // Animate in
+  setTimeout(() => {
+    toast.style.transform = "translateX(0)";
+  }, 100);
+
+  // Remove after 2.5 seconds
+  setTimeout(() => {
+    toast.style.transform = "translateX(100%)";
+    setTimeout(() => {
+      document.body.removeChild(toast);
+    }, 300);
+  }, 2500);
+}
+
+// Expose showToast globally for admin panel usage
+window.showToast = showToast;
 
 // --- START APPLICATION ---
 function initializeApp() {

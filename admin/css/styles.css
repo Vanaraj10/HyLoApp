@@ -1072,3 +1072,19 @@ body {
 .brand-item.hidden {
   display: none !important;
 }
+
+/* Bullet-pointed product descriptions in admin panel table */
+.modal-description-list {
+  margin: 0.5em 0 0 0;
+  padding-left: 1.2em;
+  list-style-type: disc;
+  color: var(--text-secondary, #444);
+  font-size: 0.98em;
+  line-height: 1.6;
+}
+
+.modal-description-list li {
+  margin-bottom: 0.25em;
+  padding-left: 0.1em;
+  word-break: break-word;
+}

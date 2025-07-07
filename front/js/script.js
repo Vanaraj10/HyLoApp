@@ -1,4 +1,3 @@
-
 // --- CATEGORY FETCH ---
 async function loadCategories() {
   try {
@@ -279,11 +278,8 @@ function updateModalContent() {
     const productId = currentProductIndex + 1;
     document.getElementById("modalProductId").textContent = productId;
 
-    document.getElementById("modalProductDescription").textContent =
-      product.product_description || "No description available.";
-
-    document.getElementById("modalProductDescription").textContent =
-      product.product_description || "No description available.";
+    // Format and display product description as bullet points
+    document.getElementById("modalProductDescription").innerHTML = formatDescriptionAsBullets(product.product_description);
 
     // Restore image opacity
     modalImage.style.opacity = "1";
@@ -1033,3 +1029,13 @@ document.addEventListener("DOMContentLoaded", function () {
     handleUrlParameters();
   };
 });
+
+function formatDescriptionAsBullets(description) {
+  if (!description) return '<span style="color:#888">No description available.</span>';
+  // Split by line breaks, trim, filter out empty lines
+  const lines = description.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0);
+  if (lines.length === 0) return '<span style="color:#888">No description available.</span>';
+  return '<ul class="modal-description-list">' +
+    lines.map(line => `<li>${line}</li>`).join('') +
+    '</ul>';
+}
