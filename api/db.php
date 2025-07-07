@@ -2,7 +2,7 @@
 // db.php - Database connection for HyLoApp
 $host = 'localhost';
 $user = 'root'; // Change if needed
-$pass = 'Vanarajisneutrino1!';    // Change if needed
+$pass = '';    // Change if needed
 $db   = 'hyloapp'; // Use your database name
 
 $conn = new mysqli($host, $user, $pass, $db);
