@@ -24,17 +24,19 @@
         <p class="admin-subtitle">
           Manage your products, categories, and brands
         </p>
-        <div class="admin-header-actions">
-          <button id="adminLogoutBtn" class="btn btn-secondary" style="float:right; margin-top:-2.5rem; margin-left:0.5rem;">Logout</button>
-          <button id="adminChangePasswordBtn" class="btn btn-tertiary" style="float:right; margin-top:-2.5rem; font-size:0.9em; padding:0.3em 0.8em; margin-right:0.5rem;">Change Password</button>
-        </div>
       </div>
 
       <div class="admin-content">
-        <form class="admin-form" id="productForm">
+        <form class="admin-form" id="productForm" autocomplete="off">
           <div class="form-group">
             <label class="form-label">Product Name</label>
-            <input type="text" id="productName" class="form-input" required />
+            <input
+              type="text"
+              id="productName"
+              class="form-input"
+              required
+              autocomplete="off"
+            />
           </div>
 
           <div class="form-group">
@@ -46,6 +48,7 @@
               min="0"
               step="0.01"
               required
+              autocomplete="off"
             />
           </div>
 
@@ -58,6 +61,7 @@
               min="0"
               max="100"
               value="0"
+              autocomplete="off"
             />
           </div>
 
@@ -70,13 +74,19 @@
               min="1"
               placeholder="e.g., 100"
               required
+              autocomplete="off"
             />
           </div>
 
           <div class="form-group">
             <label class="form-label">Category</label>
             <div class="input-group">
-              <select id="productCategory" class="form-select" required>
+              <select
+                id="productCategory"
+                class="form-select"
+                required
+                autocomplete="off"
+              >
                 <option value="">Select Category</option>
               </select>
              
@@ -86,7 +96,12 @@
           <div class="form-group">
             <label class="form-label">Brand</label>
             <div class="input-group">
-              <select id="productBrand" class="form-select" required>
+              <select
+                id="productBrand"
+                class="form-select"
+                required
+                autocomplete="off"
+              >
                 <option value="">Select Brand</option>
               </select>
              
@@ -99,6 +114,7 @@
               id="productDescription"
               class="form-textarea"
               required
+              autocomplete="off"
             ></textarea>
           </div>
 
@@ -110,6 +126,7 @@
               class="form-input"
               accept="image/*"
               required
+              autocomplete="off"
             />
           </div>
 
@@ -140,6 +157,7 @@
               id="newCategoryInput"
               class="management-input"
               placeholder="Enter category name"
+              autocomplete="off"
             />
             <button
               type="button"
@@ -172,6 +190,7 @@
                 id="newBrandInput"
                 class="management-input"
                 placeholder="Enter brand name"
+                autocomplete="off"
               />
               <input
                 type="file"
@@ -179,6 +198,7 @@
                 class="management-input"
                 accept="image/*"
                 title="Upload brand logo (optional)"
+                autocomplete="off"
               />
               <button
                 type="button"
@@ -190,13 +210,19 @@
               </button>
             </div>
             <!-- Edit Brand Form (hidden by default) -->
-            <form id="brandForm" class="management-form" style="display:none; margin-bottom:1rem;">
+            <form
+              id="brandForm"
+              class="management-form"
+              style="display:none; margin-bottom:1rem;"
+              autocomplete="off"
+            >
               <input
                 type="text"
                 id="brandNameInput"
                 class="management-input"
                 placeholder="Edit brand name"
                 required
+                autocomplete="off"
               />
               <input
                 type="file"
@@ -204,6 +230,7 @@
                 class="management-input"
                 accept="image/*"
                 title="Upload new brand logo (optional)"
+                autocomplete="off"
               />
               <div id="brandLogoPreview" style="margin-top: 0.5rem;"></div>
               <small id="brandLogoNote" style="color: #888;"></small>
@@ -232,6 +259,7 @@
                 id="brandSearchInput"
                 placeholder="Search brands..."
                 oninput="filterBrands(this.value)"
+                autocomplete="off"
               />
             </div>
 
@@ -253,6 +281,7 @@
                   id="productSearch"
                   class="search-input"
                   placeholder="Search products..."
+                  autocomplete="off"
                 />
                 <button
                   type="button"
@@ -292,14 +321,61 @@
           </div>
         </div>
 
+        <!-- Change Password and Logout Controls (bottom, mobile responsive) -->
+        <div
+          class="admin-bottom-actions"
+          style="display:flex; flex-direction:column; align-items:center; gap:0.75em; margin:2.5em 0 1.5em 0;"
+        >
+          <button
+            id="adminChangePasswordBtn"
+            class="btn btn-tertiary"
+            style="width:100%; max-width:320px; font-size:1em;"
+          >
+            Change Password
+          </button>
+          <button
+            id="adminLogoutBtn"
+            class="btn btn-secondary"
+            style="width:100%; max-width:320px; font-size:1em;"
+          >
+            Logout
+          </button>
+        </div>
         <!-- Change Password Panel (initially hidden) -->
-        <div id="adminChangePasswordPanel" style="display:none; max-width:400px; margin:2rem auto;">
+        <div
+          id="adminChangePasswordPanel"
+          style="display:none; max-width:400px; margin:1.5em auto 0 auto;"
+        >
           <h2>Change Password</h2>
-          <input id="currentPassword" type="password" placeholder="Current Password" class="form-input" />
-          <input id="newPassword" type="password" placeholder="New Password" class="form-input" />
-          <button onclick="changeAdminPassword()" class="btn btn-primary">Change Password</button>
+          <input
+            id="currentPassword"
+            type="password"
+            placeholder="Current Password"
+            class="form-input"
+            autocomplete="off"
+          />
+          <input
+            id="newPassword"
+            type="password"
+            placeholder="New Password"
+            class="form-input"
+            autocomplete="off"
+          />
+          <button
+            onclick="changeAdminPassword()"
+            class="btn btn-primary"
+          >
+            Change Password
+          </button>
           <div id="adminChangePasswordMsg" style="margin-top:1em;"></div>
         </div>
+        <style>
+          @media (max-width: 600px) {
+            .admin-bottom-actions { width: 100%; gap: 0.5em; margin: 1.5em 0 1em 0; }
+            .admin-bottom-actions button { max-width: 100%; font-size: 1em; }
+            #adminChangePasswordPanel { max-width: 98vw; }
+          }
+        </style>
       </div>
     </div>
     <script src="js/admin.js"></script>
@@ -309,6 +385,20 @@
         var panel = document.getElementById('adminChangePasswordPanel');
         panel.style.display = (panel.style.display === 'none' || panel.style.display === '') ? 'block' : 'none';
       };
+      // Attach logout handler (ensure it works even if admin.js runs after this)
+      document.getElementById('adminLogoutBtn').onclick = function() {
+        fetch('../api/admin_auth.php', { method: 'DELETE' })
+          .then(() => window.location.href = 'index.html');
+      };
+      // Auto-reload products if table is empty when page becomes visible (fixes vanishing bug)
+      document.addEventListener("visibilitychange", function () {
+        if (document.visibilityState === "visible") {
+          var productsTbody = document.getElementById("productsTbody");
+          if (productsTbody && productsTbody.children.length === 0) {
+            if (typeof loadProducts === 'function') loadProducts();
+          }
+        }
+      });
     </script>
   </body>
 </html>
