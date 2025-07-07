@@ -47,7 +47,7 @@ const submitBtn = document.getElementById("submitBtn") || document.querySelector
 // --- CATEGORY MANAGEMENT ---
 async function loadCategories() {
   try {
-    const res = await fetch("../categories.php");
+    const res = await fetch("../api/categories.php");
     const json = await res.json();
     const categories = json.data || [];
     categorySelect.innerHTML = '<option value="">Select Category</option>';
@@ -96,7 +96,7 @@ async function addCategory() {
     return;
   }
   try {
-    const res = await fetch("../categories.php", {
+    const res = await fetch("../api/categories.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name }),
@@ -120,7 +120,7 @@ async function deleteCategory(id) {
   )
     return;
   try {
-    const res = await fetch("../categories.php", {
+    const res = await fetch("../api/categories.php", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
@@ -138,7 +138,7 @@ async function editCategory(id, currentName) {
   const newName = prompt("Edit category name:", currentName);
   if (!newName || !newName.trim() || newName.trim() === currentName) return;
   try {
-    const res = await fetch("../categories.php", {
+    const res = await fetch("../api/categories.php", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, name: newName.trim() }),
@@ -155,7 +155,7 @@ async function editCategory(id, currentName) {
 // --- BRAND MANAGEMENT ---
 async function loadBrands() {
   try {
-    const res = await fetch("../brands.php");
+    const res = await fetch("../api/brands.php");
     const json = await res.json();
     const brands = json.data || [];
     brandSelect.innerHTML = '<option value="">Select Brand</option>';
@@ -273,7 +273,7 @@ async function addBrand() {
     logo = await fileToBase64(logoInput.files[0]);
   }
   try {
-    const res = await fetch("../brands.php", {
+    const res = await fetch("../api/brands.php", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, logo }),
@@ -298,7 +298,7 @@ async function deleteBrand(id) {
   )
     return;
   try {
-    const res = await fetch("../brands.php", {
+    const res = await fetch("../api/brands.php", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),
@@ -314,7 +314,7 @@ async function deleteBrand(id) {
 
 async function editBrand(id, currentName) {
   try {
-    const res = await fetch("../brands.php");
+    const res = await fetch("../api/brands.php");
     const json = await res.json();
     const data = (json.data || []).find((b) => b.id == id);
     if (!data) throw new Error("Brand not found");
@@ -356,7 +356,7 @@ async function updateBrand() {
     return;
   }
   try {
-    const res = await fetch("../brands.php", {
+    const res = await fetch("../api/brands.php", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id: editingBrandId, name, logo }),
@@ -403,7 +403,7 @@ async function loadProducts(page = 1, search = "") {
   try {
     currentPage = page;
     currentSearch = search;
-    const res = await fetch("../products.php");
+    const res = await fetch("../api/products.php");
     const json = await res.json();
     let data = json.data || [];
     if (search) {
@@ -621,13 +621,13 @@ async function handleProductSubmit(e) {
     let res;
     if (editingId) {
       productData.id = editingId;
-      res = await fetch("../products.php", {
+      res = await fetch("../api/products.php", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),
       });
     } else {
-      res = await fetch("../products.php", {
+      res = await fetch("../api/products.php", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(productData),
@@ -653,7 +653,7 @@ async function handleProductSubmit(e) {
 // --- Edit/Delete Product Functions ---
 async function editProduct(id) {
   try {
-    const res = await fetch("../products.php");
+    const res = await fetch("../api/products.php");
     const json = await res.json();
     const data = (json.data || []).find((p) => p.id == id);
     if (!data) throw new Error("Product not found");
@@ -683,7 +683,7 @@ async function editProduct(id) {
 async function deleteProduct(id) {
   if (!confirm("Are you sure you want to delete this product?")) return;
   try {
-    const res = await fetch("../products.php", {
+    const res = await fetch("../api/products.php", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id }),

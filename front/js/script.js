@@ -6,7 +6,7 @@ const SUPABASE_ANON_KEY =
 // --- CATEGORY FETCH ---
 async function loadCategories() {
   try {
-    const res = await fetch('../categories.php');
+    const res = await fetch("../api/categories.php");
     const json = await res.json();
     const categories = json.data || [];
     const categoryFilter = document.getElementById('categoryFilter');
@@ -30,7 +30,7 @@ let brandsList = [];
 // --- BRAND FETCH ---
 async function loadBrandsCarousel() {
     try {
-        const res = await fetch('../brands.php');
+        const res = await fetch("../api/brands.php");
         const json = await res.json();
         brandsList = (json.data || []).filter(brand => brand.logo);
         renderBrandMarquee();
@@ -53,7 +53,7 @@ let currentProducts = [];
 
 async function fetchProducts(page = 1, search = '', category = '') {
   try {
-    const res = await fetch('../products.php');
+    const res = await fetch("../api/products.php");
     const json = await res.json();
     let allData = json.data || [];
     // Filter by category
@@ -142,7 +142,7 @@ function renderBrandMarquee() {
 
 async function fetchProducts(page = 1, search = "", category = "") {
   try {
-    const res = await fetch('../products.php');
+    const res = await fetch("../api/products.php");
     const json = await res.json();
     let allData = json.data || [];
     // Filter by category
