@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HyLoApp - One Stop Solutions for all your Bulk Needs</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <!-- Header Section -->
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <div class="logo-section">
+            <img src="images/logo.png" alt="HyLoApp Logo" class="logo" />
+            <div class="logo-text">
+              <p class="tagline">One Stop Solutions for all your Bulk Needs</p>
+            </div>
+          </div>
+
+          <div class="header-contact">
+            <div class="contact-item">
+              <i class="fas fa-phone"></i>
+              <span>+91 9444 50 8281</span>
+            </div>
+            <div class="contact-item">
+              <i class="fas fa-envelope"></i>
+              <span>info@hyloapp.in</span>
+            </div>
+          </div>
+
+          <div class="bulk-notice">
+            <span class="bulk-badge"> Bulk Orders Only </span>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- Search & Filter Section -->
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <div class="container">
+        <section class="search-section">
+          <div class="container">
+            <div class="search-wrapper">
+              <div class="search-bar">
+                <div class="search-input-wrapper">
+                  <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search products, categories, or brands... (e.g., diary, stationary, Parker)"
+                    class="search-input"
+                  />
+                </div>
+                <div class="filter-group">
+                  <select id="categoryFilter" class="filter-select">
+                    <option value="">All Categories</option>
+                    <!-- Categories will be populated dynamically -->
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="product-section">
+          <div class="section-header">
+            <h3>Our Products</h3>
+            <div class="results-count">
+              <span id="resultsCount">Showing all products</span>
+            </div>
+          </div>
+
+          <div class="products-grid" id="productsGrid">
+            <!-- Products will be populated by JavaScript -->
+          </div>
+        </section>
+
+        <section class="delivery-moq-section">
+          <div class="delivery-section-horizontal">
+            <h3><i class="fas fa-shipping-fast"></i> Where / How We Deliver</h3>
+            <div class="delivery-timeline-horizontal">
+              <div class="delivery-item-horizontal">
+                <div class="delivery-time-image">
+                  <img src="images/24h.jpg" alt="24 Hours" class="time-icon" />
+                </div>
+                <div class="delivery-content">
+                  <h4>Within 24 Hours</h4>
+                  <p>Across Chennai</p>
+                </div>
+              </div>
+
+              <div class="delivery-item-horizontal">
+                <div class="delivery-time-image">
+                  <img src="images/48h.png" alt="48 Hours" class="time-icon" />
+                </div>
+                <div class="delivery-content">
+                  <h4>Within 48 Hours</h4>
+                  <p>Across Tamil Nadu</p>
+                </div>
+              </div>
+
+              <div class="delivery-item-horizontal">
+                <div class="delivery-time-image">
+                  <img src="images/72h.png" alt="72 Hours" class="time-icon" />
+                </div>
+                <div class="delivery-content">
+                  <h4>Within 72 Hours</h4>
+                  <p>Across South India</p>
+                </div>
+              </div>
+
+              <div class="delivery-item-horizontal">
+                <div class="delivery-time-image">
+                  <img src="images/7d.png" alt="7 Days" class="time-icon" />
+                </div>
+                <div class="delivery-content">
+                  <h4>Within 7 Days</h4>
+                  <p>Across India</p>
+                </div>
+              </div>
+              <div class="delivery-item-horizontal">
+                <div class="delivery-icon">
+                  <i class="fas fa-globe"></i>
+                </div>
+                <div class="delivery-content">
+                  <h4>Worldwide Export</h4>
+                  <p>Across Countries</p>
+                </div>
+              </div>
+              <div class="delivery-item-horizontal moq-grid-card">
+                <div class="delivery-content">
+                  <h4>MOQ Options</h4>
+                  <div class="moq-grid">
+                    <div class="moq-grid-row">
+                      <span class="moq-item">100</span>
+                      <span class="moq-item">5K</span>
+                      <span class="moq-item">50K</span>
+                    </div>
+                    <div class="moq-grid-row">
+                      <span class="moq-item">500</span>
+                      <span class="moq-item moq-highlight">MOQ</span>
+                      <span class="moq-item">100K</span>
+                    </div>
+                    <div class="moq-grid-row">
+                      <span class="moq-item">1K</span>
+                      <span class="moq-item">10K</span>
+                      <span class="moq-item">More</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+    <section
+      class="brands-carousel-section"
+      aria-label="Our trusted brand partners"
+    >
+      <h2>
+        <i class="fas fa-handshake" aria-hidden="true"></i>
+        Our Partners
+      </h2>
+      <div class="brands-marquee-container">
+        <div class="brands-marquee" id="brandsMarquee"></div>
+      </div>
+    </section>
+
+    <!-- Why Us Section -->
+    <section class="why-us-section">
+      <div class="container">
+        <h2>Why Choose HyLoApp?</h2>
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-truck"></i>
+            </div>
+            <h4>Free Delivery</h4>
+            <p>Free Delivery Across Chennai</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-receipt"></i>
+            </div>
+            <h4>GST Invoice</h4>
+            <p>GST Invoice for Every Order</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-vial"></i>
+            </div>
+            <h4>Samples</h4>
+            <p>Samples Can Be Provided</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-icon">
+              <i class="fas fa-print"></i>
+            </div>
+            <h4>Branding</h4>
+            <p>Logo / Branding Can Be Printed</p>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- Business Terms Section -->
+    <section class="terms-section">
+      <div class="container">
+        <h2>Our Terms & Business Scope</h2>
+        <div class="terms-grid">
+          <div class="terms-card">
+            <div class="terms-icon">
+              <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <h4>Payment Terms</h4>
+            <p>100% Advance Payment</p>
+          </div>
+
+          <div class="terms-card">
+            <div class="terms-icon">
+              <i class="fas fa-user-friends"></i>
+            </div>
+            <h4>Customer Scope</h4>
+            <p>Unloading & On-site Delivery Handling</p>
+          </div>
+
+          <div class="terms-card">
+            <div class="terms-icon">
+              <i class="fas fa-truck-loading"></i>
+            </div>
+            <h4>Our Scope</h4>
+            <p>Loading & Professional Packing</p>
+          </div>
+
+          <div class="terms-card">
+            <div class="terms-icon">
+              <i class="fas fa-route"></i>
+            </div>
+            <h4>Logistics Support</h4>
+            <p>Guidance on Shipping & Delivery</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-content">
+          <div class="footer-section">
+            <img src="images/logo.png" alt="HyLoApp Logo" class="footer-logo" />
+            <p>One Stop Solutions for all your Bulk Needs</p>
+          </div>
+
+          <div class="footer-section">
+            <h4>Contact Info</h4>
+            <p><i class="fas fa-phone"></i> +91 9444 50 8281</p>
+            <p><i class="fas fa-envelope"></i> info@hyloapp.in</p>
+            <p><i class="fas fa-location"></i> Chennai, Tamilnadu, India</p>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <p>
+            &copy; 2025 HyLoApp Technologies Private Limited. All rights
+            reserved.
+          </p>
+        </div>
+      </div>
+    </footer>
+    <!-- Product Modal -->
+    <div id="productModal" class="product-modal">
+      <div class="product-modal-overlay" onclick="closeProductModal()"></div>
+      <div class="product-modal-container">
+        <!-- Close Button -->
+        <button class="modal-close-btn" onclick="closeProductModal()">
+          <i class="fas fa-times"></i>
+        </button>
+
+        <!-- Share Button -->
+        <button class="modal-share-btn" onclick="shareProduct()">
+          <i class="fas fa-share-alt"></i>
+        </button>
+
+        <!-- Navigation Arrows -->
+        <button
+          class="modal-nav-btn modal-nav-prev"
+          onclick="navigateProduct(-1)"
+        >
+          <i class="fas fa-chevron-left"></i>
+        </button>
+        <button
+          class="modal-nav-btn modal-nav-next"
+          onclick="navigateProduct(1)"
+        >
+          <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <!-- Modal Content -->
+        <div class="modal-content-wrapper">
+          <!-- Image Section -->
+          <div class="modal-image-section">
+            <div class="modal-image-container">
+              <img
+                id="modalProductImage"
+                src=""
+                alt=""
+                class="modal-product-image"
+              />
+            </div>
+          </div>
+
+          <!-- Info Section -->
+          <div class="modal-info-section">
+            <!-- Header -->
+            <div class="modal-header">
+              <!-- Line 1: Product Name -->
+              <h2 id="modalProductName" class="modal-title"></h2>
+
+              <!-- Line 2: Brand and Category -->
+              <div class="modal-brand-category-row">
+                <span id="modalProductBrand" class="brand-text"></span>
+                <span id="modalProductCategory" class="category-text"></span>
+              </div>
+
+              <!-- Line 3: ID and MOQ -->
+              <div class="modal-id-moq-row">
+                <div class="id-section">
+                  <span>ID:</span>
+                  <span id="modalProductId" class="id-number"></span>
+                </div>
+                <div class="moq-section">
+                  <span>MOQ:</span>
+                  <span id="modalProductMOQ" class="moq-amount"></span>
+                </div>
+              </div>
+
+              <!-- Line 4: Price Section -->
+              <div class="modal-price-row">
+                <span
+                  id="modalProductPriceOriginal"
+                  class="price-amount-original"
+                ></span>
+                <span id="modalProductPrice" class="price-amount"></span>
+                <span id="modalProductDiscount" class="discount-badge"></span>
+              </div>
+              <div class="description-wrapper">
+                 <span>Product Description</span>
+                 <p id="modalProductDescription" class="description-text"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
