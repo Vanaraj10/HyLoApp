@@ -1,7 +1,3 @@
-// Fetch products from Supabase with pagination
-const SUPABASE_URL = "https://wpxgoxlfyscqgkppnnja.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndweGdveGxmeXNjcWdrcHBubmphIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2Mzg4NDAsImV4cCI6MjA2NzIxNDg0MH0.kJR8V_aZEFQ6EDNq4p0YVQjymGWnChRJCSW4cYeXqeA";
 
 // --- CATEGORY FETCH ---
 async function loadCategories() {
@@ -84,27 +80,6 @@ async function fetchProducts(page = 1, search = '', category = '') {
   }
 }
 
-async function initSupabase() {
-  if (!window.supabase) {
-    const script = document.createElement("script");
-    script.src =
-      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/umd/supabase.min.js";
-    script.onload = () => {
-      supabaseClient = window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_ANON_KEY
-      );
-      initializeApp();
-    };
-    document.head.appendChild(script);
-  } else {
-    supabaseClient = window.supabase.createClient(
-      SUPABASE_URL,
-      SUPABASE_ANON_KEY
-    );
-    initializeApp();
-  }
-}
 
 async function initializeApp() {
   try {
@@ -641,7 +616,7 @@ function setupProductEvents() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  initSupabase();
+  initializeApp();
   setupProductEvents();
 });
 
