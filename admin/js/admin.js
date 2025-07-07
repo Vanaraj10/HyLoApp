@@ -1,25 +1,3 @@
-// admin.js - Enhanced Admin Panel with Categories and Brands Management
-// --- CONFIGURE THESE ---
-/*
-IMPORTANT: To enable frontend image deletion from Cloudinary:
-
-1. Go to your Cloudinary Dashboard (https://cloudinary.com/console)
-2. Go to Settings → Upload → Upload presets
-3. Find your upload preset "HyLoApp" 
-4. Edit the preset and scroll down to "Upload control"
-5. Set "Delete control" to "Public" or "Signed" 
-6. Save the preset
-
-OR
-
-Alternative Method - Enable unsigned deletion:
-1. In your Cloudinary dashboard, go to Settings → Security
-2. Under "Restricted media types", make sure deletion is allowed
-3. Consider setting up auto-deletion rules for uploaded assets
-
-Note: Frontend deletion has security implications. For production, 
-consider implementing server-side deletion for better security.
-*/
 
 // --- Helper to convert file to base64 ---
 async function fileToBase64(file) {

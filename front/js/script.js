@@ -67,11 +67,19 @@ async function fetchProducts(page = 1, search = '', category = '') {
         );
       });
     }
-    // Sort by created_at desc
-    allData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    // Custom sort: products with 'gift' in category name first, then by created_at desc
+    allData.sort((a, b) => {
+      const aGift = (a.category_name || '').toLowerCase().includes('gift');
+      const bGift = (b.category_name || '').toLowerCase().includes('gift');
+      if (aGift && !bGift) return -1;
+      if (!aGift && bGift) return 1;
+      // If both or neither, sort by created_at desc
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
     totalProducts = allData.length;
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE;
+    // Slice after sorting the entire data
     return allData.slice(from, to);
   } catch (error) {
     console.error('Error fetching products:', error);
@@ -135,11 +143,19 @@ async function fetchProducts(page = 1, search = "", category = "") {
         );
       });
     }
-    // Sort by created_at desc
-    allData.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    // Custom sort: products with 'gift' in category name first, then by created_at desc
+    allData.sort((a, b) => {
+      const aGift = (a.category_name || '').toLowerCase().includes('gift');
+      const bGift = (b.category_name || '').toLowerCase().includes('gift');
+      if (aGift && !bGift) return -1;
+      if (!aGift && bGift) return 1;
+      // If both or neither, sort by created_at desc
+      return new Date(b.created_at) - new Date(a.created_at);
+    });
     totalProducts = allData.length;
     const from = (page - 1) * PAGE_SIZE;
     const to = from + PAGE_SIZE;
+    // Slice after sorting the entire data
     return allData.slice(from, to);
   } catch (error) {
     console.error('Error fetching products:', error);
