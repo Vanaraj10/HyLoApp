@@ -41,6 +41,7 @@ let currentPage = 1;
 let totalProducts = 0;
 let currentSearch = "";
 let editingId = null;
+let editingBrandId = null;
 const submitBtn = document.getElementById("submitBtn") || document.querySelector("#productForm button[type='submit']");
 
 // --- CATEGORY MANAGEMENT ---
@@ -312,21 +313,89 @@ async function deleteBrand(id) {
 }
 
 async function editBrand(id, currentName) {
-  const newName = prompt("Edit brand name:", currentName);
-  if (!newName || !newName.trim() || newName.trim() === currentName) return;
+  try {
+    const res = await fetch("../brands.php");
+    const json = await res.json();
+    const data = (json.data || []).find((b) => b.id == id);
+    if (!data) throw new Error("Brand not found");
+    // Hide add form, show edit form
+    document.getElementById("addBrandForm").style.display = "none";
+    document.getElementById("brandForm").style.display = "flex";
+    document.getElementById("brandNameInput").value = data.name;
+    const logoInput = document.getElementById("brandLogoInput");
+    logoInput.setAttribute("data-current-url", data.logo);
+    // Show current logo preview
+    const logoPreview = document.getElementById("brandLogoPreview");
+    if (logoPreview) {
+      logoPreview.innerHTML = `<img src="data:image/png;base64,${data.logo}" alt="Current Logo" style="max-width: 80px; max-height: 80px; border-radius: 8px; box-shadow: 0 2px 8px #0001;">`;
+    }
+    const logoNote = document.getElementById("brandLogoNote");
+    if (logoNote) {
+      logoNote.textContent = "Current logo shown. Upload a new logo only if you want to replace it.";
+    }
+    editingBrandId = id;
+    document.getElementById("brandSubmitBtn").innerHTML = '<i class="fas fa-edit"></i> Update Brand';
+    logoInput.removeAttribute("required");
+    document.getElementById("brandForm").scrollIntoView({ behavior: "smooth" });
+  } catch (error) {
+    console.error("Error loading brand for edit:", error);
+    alert("Error loading brand: " + error.message);
+  }
+}
+
+// Update Brand logic
+async function updateBrand() {
+  const name = document.getElementById("brandNameInput").value.trim();
+  const logoInput = document.getElementById("brandLogoInput");
+  let logo = logoInput.getAttribute("data-current-url") || "";
+  if (logoInput.files && logoInput.files[0]) {
+    logo = await fileToBase64(logoInput.files[0]);
+  }
+  if (!name) {
+    alert("Please enter a brand name");
+    return;
+  }
   try {
     const res = await fetch("../brands.php", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, name: newName.trim(), logo: "" }),
+      body: JSON.stringify({ id: editingBrandId, name, logo }),
     });
     const json = await res.json();
     if (!json.success) throw new Error("Failed to update brand");
+    resetBrandForm();
+    document.getElementById("brandForm").style.display = "none";
+    document.getElementById("addBrandForm").style.display = "flex";
     await loadBrands();
   } catch (error) {
     console.error("Error updating brand:", error);
     alert("Error updating brand: " + error.message);
   }
+}
+
+// Brand logo preview on file select
+const brandLogoInput = document.getElementById("brandLogoInput");
+if (brandLogoInput) {
+  brandLogoInput.addEventListener("change", function (e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById("brandLogoPreview");
+    if (file && preview) {
+      const reader = new FileReader();
+      reader.onload = function (evt) {
+        preview.innerHTML = `<img src="${evt.target.result}" alt="Selected Logo" style="max-width: 80px; max-height: 80px; border-radius: 8px; box-shadow: 0 2px 8px #0001;">`;
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+}
+
+function resetBrandForm() {
+  document.getElementById("brandForm").reset();
+  const logoPreview = document.getElementById("brandLogoPreview");
+  if (logoPreview) logoPreview.innerHTML = "";
+  const logoNote = document.getElementById("brandLogoNote");
+  if (logoNote) logoNote.textContent = "";
+  editingBrandId = null;
 }
 
 // --- PRODUCT MANAGEMENT ---
@@ -635,6 +704,8 @@ function resetForm() {
   editingId = null;
   submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Product';
   document.getElementById("productImage").setAttribute("required", "required");
+  // Reset brand form as well
+  resetBrandForm();
 }
 
 // --- COLLAPSIBLE BRAND SECTION ---

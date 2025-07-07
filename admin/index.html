@@ -1239,7 +1239,7 @@
 
           <div class="management-content">
             <!-- Add Brand Form -->
-            <div class="management-form">
+            <div class="management-form" id="addBrandForm">
               <input
                 type="text"
                 id="newBrandInput"
@@ -1261,7 +1261,43 @@
                 <i class="fas fa-plus"></i>
                 Add Brand
               </button>
-            </div>            <!-- Brand search for large collections -->
+            </div>
+            <!-- Edit Brand Form (hidden by default) -->
+            <form id="brandForm" class="management-form" style="display:none; margin-bottom:1rem;">
+              <input
+                type="text"
+                id="brandNameInput"
+                class="management-input"
+                placeholder="Edit brand name"
+                required
+              />
+              <input
+                type="file"
+                id="brandLogoInput"
+                class="management-input"
+                accept="image/*"
+                title="Upload new brand logo (optional)"
+              />
+              <div id="brandLogoPreview" style="margin-top: 0.5rem;"></div>
+              <small id="brandLogoNote" style="color: #888;"></small>
+              <button
+                type="button"
+                id="brandSubmitBtn"
+                class="btn btn-primary"
+                onclick="updateBrand()"
+              >
+                <i class="fas fa-edit"></i>
+                Update Brand
+              </button>
+              <button
+                type="button"
+                class="btn btn-secondary"
+                onclick="resetBrandForm(); this.form.style.display='none'; document.getElementById('addBrandForm').style.display='flex';"
+              >
+                Cancel
+              </button>
+            </form>
+            <!-- Brand search for large collections -->
             <div class="brand-search" id="brandSearch">
               <i class="fas fa-search"></i>
               <input
