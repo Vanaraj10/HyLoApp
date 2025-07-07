@@ -15,7 +15,9 @@ CREATE TABLE brands (
 CREATE TABLE products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(255) NOT NULL,
-    product_price FLOAT NOT NULL,
+    -- product_price FLOAT NOT NULL, -- Deprecated: use price or mrp
+    price FLOAT DEFAULT NULL, -- Price (+ GST)
+    mrp FLOAT DEFAULT NULL,   -- Price (including GST)
     product_discount FLOAT DEFAULT 0,
     product_moq INT DEFAULT 1,
     category_id INT NOT NULL,

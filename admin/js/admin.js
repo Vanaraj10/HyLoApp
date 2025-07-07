@@ -466,7 +466,9 @@ async function loadProducts(page = 1, search = "") {
             <tr>
                 <td><img src="data:image/png;base64,${product.product_image}" alt="${product.product_name}"></td>
                 <td><strong>${product.product_name}</strong></td>
-                <td><strong>₹${product.product_price}</strong></td>
+                <td><strong>
+                  ${product.price ? `₹${product.price} <span style='font-size:0.85em;color:#888;'>(+ GST)</span>` : product.mrp ? `₹${product.mrp} <span style='font-size:0.85em;color:#888;'>(incl. GST)</span>` : "-"}
+                </strong></td>
                 <td>${product.product_discount || 0}%</td>
                 <td>${product.product_moq || 1}</td>
                 <td><span class="tag" style="font-size: 0.75rem; padding: 0.25rem 0.5rem;">${product.category_name || "N/A"}</span></td>
@@ -622,6 +624,7 @@ async function handleProductSubmit(e) {
   submitBtn.disabled = true;
   const name = document.getElementById("productName").value.trim();
   const price = parseFloat(document.getElementById("productPrice").value);
+  const mrp = parseFloat(document.getElementById("productMRP").value);
   const discount =
     parseFloat(document.getElementById("productDiscount").value) || 0;
   const moq = parseInt(document.getElementById("productMOQ").value) || 1;
@@ -642,9 +645,15 @@ async function handleProductSubmit(e) {
       .getElementById("productImage")
       .getAttribute("data-current-url");
   }
+  if (isNaN(price) && isNaN(mrp)) {
+    alert("Please fill either Price or MRP");
+    submitBtn.disabled = false;
+    return;
+  }
   const productData = {
     product_name: name,
-    product_price: price,
+    price: isNaN(price) ? null : price,
+    mrp: isNaN(mrp) ? null : mrp,
     product_discount: discount,
     product_moq: moq,
     category_id: parseInt(categoryId),
@@ -670,18 +679,13 @@ async function handleProductSubmit(e) {
     }
     const json = await res.json();
     if (!json.success) throw new Error("Failed to save product");
-    productForm.reset();
-    editingId = null;
-    submitBtn.innerHTML = '<i class="fas fa-plus"></i> Add Product';
     await loadProducts();
-    window.showToast && showToast(editingId ? "Product updated successfully!" : "Product added successfully!", "success");
-  } catch (err) {
-    console.error("Error saving product:", err);
-    alert("Error: " + err.message);
+    window.showToast && showToast(editingId ? "Product updated!" : "Product added!", "success");
+    resetForm();
+  } catch (error) {
+    console.error("Error saving product:", error);
+    alert("Error saving product: " + error.message);
   } finally {
-    submitBtn.innerHTML = editingId
-      ? '<i class="fas fa-edit"></i> Update Product'
-      : '<i class="fas fa-plus"></i> Add Product';
     submitBtn.disabled = false;
   }
 }
@@ -694,25 +698,30 @@ async function editProduct(id) {
     const data = (json.data || []).find((p) => p.id == id);
     if (!data) throw new Error("Product not found");
     document.getElementById("productName").value = data.product_name;
-    document.getElementById("productPrice").value = data.product_price;
-    document.getElementById("productDiscount").value =
-      data.product_discount || 0;
+    document.getElementById("productPrice").value = data.price || "";
+    document.getElementById("productMRP").value = data.mrp || "";
+    document.getElementById("productDiscount").value = data.product_discount || 0;
     document.getElementById("productMOQ").value = data.product_moq || 1;
     document.getElementById("productCategory").value = data.category_id;
     document.getElementById("productBrand").value = data.brand_id;
-    document.getElementById("productDescription").value =
-      data.product_description;
+    document.getElementById("productDescription").value = data.product_description;
     const imageInput = document.getElementById("productImage");
     imageInput.setAttribute("data-current-url", data.product_image);
     editingId = id;
     submitBtn.innerHTML = '<i class="fas fa-edit"></i> Update Product';
     imageInput.removeAttribute("required");
-    document
-      .getElementById("productForm")
-      .scrollIntoView({ behavior: "smooth" });
+    // Set mutual exclusion state
+    if (data.price) {
+      document.getElementById("productMRP").disabled = true;
+    } else if (data.mrp) {
+      document.getElementById("productPrice").disabled = true;
+    } else {
+      document.getElementById("productPrice").disabled = false;
+      document.getElementById("productMRP").disabled = false;
+    }
   } catch (error) {
-    console.error("Error loading product for edit:", error);
-    alert("Error loading product: " + error.message);
+    console.error("Error editing product:", error);
+    alert("Error editing product: " + error.message);
   }
 }
 
@@ -878,3 +887,25 @@ function showToast(message, type = "info") {
 
 // Expose showToast globally for admin panel usage
 window.showToast = showToast;
+
+// --- Price/MRP mutual exclusion logic ---
+const priceInput = document.getElementById("productPrice");
+const mrpInput = document.getElementById("productMRP");
+if (priceInput && mrpInput) {
+  priceInput.addEventListener("input", function() {
+    if (this.value) {
+      mrpInput.disabled = true;
+      mrpInput.value = "";
+    } else {
+      mrpInput.disabled = false;
+    }
+  });
+  mrpInput.addEventListener("input", function() {
+    if (this.value) {
+      priceInput.disabled = true;
+      priceInput.value = "";
+    } else {
+      priceInput.disabled = false;
+    }
+  });
+}

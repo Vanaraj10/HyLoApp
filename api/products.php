@@ -32,10 +32,11 @@ switch ($method) {
     case 'POST':
         // Add new product
         $input = json_decode(file_get_contents('php://input'), true);
-        $stmt = $conn->prepare("INSERT INTO products (product_name, product_price, product_discount, product_moq, category_id, brand_id, product_description, product_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param('sdidiiss',
+        $stmt = $conn->prepare("INSERT INTO products (product_name, price, mrp, product_discount, product_moq, category_id, brand_id, product_description, product_image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param('sddidiiss',
             $input['product_name'],
-            $input['product_price'],
+            $input['price'],
+            $input['mrp'],
             $input['product_discount'],
             $input['product_moq'],
             $input['category_id'],
@@ -49,10 +50,11 @@ switch ($method) {
     case 'PUT':
         // Update product
         $input = json_decode(file_get_contents('php://input'), true);
-        $stmt = $conn->prepare("UPDATE products SET product_name=?, product_price=?, product_discount=?, product_moq=?, category_id=?, brand_id=?, product_description=?, product_image=? WHERE id=?");
-        $stmt->bind_param('sdidiissi',
+        $stmt = $conn->prepare("UPDATE products SET product_name=?, price=?, mrp=?, product_discount=?, product_moq=?, category_id=?, brand_id=?, product_description=?, product_image=? WHERE id=?");
+        $stmt->bind_param('sddidiissi',
             $input['product_name'],
-            $input['product_price'],
+            $input['price'],
+            $input['mrp'],
             $input['product_discount'],
             $input['product_moq'],
             $input['category_id'],

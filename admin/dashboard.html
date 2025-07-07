@@ -40,16 +40,29 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label">Product Price (₹)</label>
+            <label class="form-label">Price (₹) <span style="font-weight:400;font-size:0.9em;">(+ GST)</span></label>
             <input
               type="number"
               id="productPrice"
               class="form-input"
               min="0"
               step="0.01"
-              required
               autocomplete="off"
+              placeholder="Enter Price (if not MRP)"
             />
+          </div>
+          <div class="form-group">
+            <label class="form-label">MRP (₹) <span style="font-weight:400;font-size:0.9em;">(including GST)</span></label>
+            <input
+              type="number"
+              id="productMRP"
+              class="form-input"
+              min="0"
+              step="0.01"
+              autocomplete="off"
+              placeholder="Enter MRP (if not Price)"
+            />
+            <small style="color:#888;">Fill either Price or MRP, not both.</small>
           </div>
 
           <div class="form-group">

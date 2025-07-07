@@ -197,11 +197,9 @@ function renderProducts(products) {
     productsGrid.innerHTML = `<div class="no-products"><div class="no-products-icon"><i class="fas fa-search"></i></div><h3>No products found</h3><p>Try adjusting your search or filters</p></div>`;
     return;
   }
-
   // Get current search term for highlighting
   const searchInput = document.getElementById("searchInput");
   const searchTerm = searchInput ? searchInput.value.trim().toLowerCase() : "";
-
   productsGrid.innerHTML = products
     .map((product, index) => {
       const categoryName = product.category_name || "Unknown Category";
@@ -221,6 +219,22 @@ function renderProducts(products) {
       const highlightedBrand = searchTerm
         ? highlightText(brandName, searchTerm)
         : brandName;
+      // Price/MRP logic
+      let priceHtml = "-";
+      let priceValue = product.price ? product.price : product.mrp;
+      let priceLabel = product.price ? "(+ GST)" : product.mrp ? "(incl. GST)" : "";
+      if (priceValue) {
+        if (product.product_discount && product.product_discount > 0) {
+          const discounted = Math.round(priceValue * (1 - product.product_discount / 100));
+          priceHtml = `
+            <span class='product-price-original' style='text-decoration:line-through;color:#888;font-size:0.80em;'>₹${priceValue}</span>
+            <span class='product-price-discounted'>₹${discounted} <span style='font-size:0.80em;color:#888;'>${priceLabel}</span></span>
+            <span class='product-offer'>${product.product_discount}% OFF</span>
+          `;
+        } else {
+          priceHtml = `<span class='product-price'>₹${priceValue} <span style='font-size:0.75em;color:#888;'>${priceLabel}</span></span>`;
+        }
+      }
       return `
         <div class="product-card" data-category="${product.category_id}" onclick="openProductModal(${index})">
           <div class="product-image">
@@ -233,13 +247,7 @@ function renderProducts(products) {
               <span class="product-moq">MOQ: ${(product.product_moq || 1).toLocaleString()}</span>
             </div>
             <div class="product-price-line">
-              ${product.product_discount ? `
-                <span class="product-price-original">₹${product.product_price}</span>
-                <span class="product-price-discounted">₹${Math.round(product.product_price * (1 - product.product_discount / 100))}</span>
-                <span class="product-offer">${product.product_discount}% OFF</span>
-              ` : `
-                <span class="product-price">₹${product.product_price}</span>
-              `}
+              ${priceHtml}
             </div>
           </div>
         </div>
@@ -259,47 +267,55 @@ function updateModalContent() {
     document.getElementById("modalProductName").textContent = product.product_name;
     document.getElementById("modalProductCategory").textContent = product.category_name || "Unknown Category";
     document.getElementById("modalProductBrand").textContent = product.brand_name || "Unknown Brand";
-
-    // Handle pricing with discount logic
+    // Price/MRP logic
     const originalPriceElement = document.getElementById("modalProductPriceOriginal");
     const discountedPriceElement = document.getElementById("modalProductPrice");
     const discountBadge = document.getElementById("modalProductDiscount");
-
-    if (product.product_discount && product.product_discount > 0) {
+    let priceLabel = "";
+    let priceValue = null;
+    if (product.price) {
+      priceValue = product.price;
+      priceLabel = "(+ GST)";
+    } else if (product.mrp) {
+      priceValue = product.mrp;
+      priceLabel = "(including GST)";
+    }
+    if (product.product_discount && product.product_discount > 0 && priceValue) {
       // Show original price with strikethrough
-      originalPriceElement.textContent = `₹${product.product_price}`;
+      originalPriceElement.textContent = `₹${priceValue}`;
       originalPriceElement.style.display = "inline-block";
-      
-      // Calculate and show discounted price
-      const discountedPrice = Math.round(product.product_price * (1 - product.product_discount / 100));
-      discountedPriceElement.textContent = `₹${discountedPrice}`;
-      discountedPriceElement.style.color = "#2563eb"; // Blue color for discounted price
-      
-      // Show discount badge
+      originalPriceElement.style.textDecoration = "line-through";
+      originalPriceElement.style.color = "#888";
+      const discountedPrice = Math.round(priceValue * (1 - product.product_discount / 100));
+      discountedPriceElement.textContent = `₹${discountedPrice} ${priceLabel}`;
+      discountedPriceElement.style.color = "#2563eb";
       discountBadge.textContent = `${product.product_discount}% OFF`;
       discountBadge.style.display = "inline-block";
-    } else {
-      // No discount - hide original price, show regular price
+    } else if (priceValue) {
       originalPriceElement.style.display = "none";
-      discountedPriceElement.textContent = `₹${product.product_price}`;
-      discountedPriceElement.style.color = "#1f2937"; // Regular color for normal price      discountBadge.style.display = "none";
+      discountedPriceElement.textContent = `₹${priceValue} ${priceLabel}`;
+      discountedPriceElement.style.color = "#1f2937";
+      discountBadge.style.display = "none";
+    } else {
+      originalPriceElement.style.display = "none";
+      discountedPriceElement.textContent = "-";
+      discountBadge.style.display = "none";
     }
-
     // Display individual product MOQ
     const productMOQ = product.product_moq || 1;
-    document.getElementById("modalProductMOQ").textContent =
-      productMOQ.toLocaleString();
-
+    document.getElementById("modalProductMOQ").textContent = productMOQ.toLocaleString();
     // Generate and display simple numeric product ID (1-based)
-    const productId = currentProductIndex + 1;
-    document.getElementById("modalProductId").textContent = productId;
-
-    // Format and display product description as bullet points
+    document.getElementById("modalProductId").textContent = product.id || (currentProductIndex + 1);
+    // Description
     document.getElementById("modalProductDescription").innerHTML = formatDescriptionAsBullets(product.product_description);
-
-    // Restore image opacity
     modalImage.style.opacity = "1";
-  }, 150);
+  }, 10);
+  // Update navigation buttons
+  updateModalNavigation();
+  // Prevent body scroll
+  document.body.style.overflow = "hidden";
+  // Add touch event listeners for swiping (only once)
+  setupModalTouchEvents();
 }
 
 function openProductModal(index) {
