@@ -4,18 +4,18 @@ async function loadCategories() {
     const res = await fetch("../api/categories.php");
     const json = await res.json();
     const categories = json.data || [];
-    const categoryFilter = document.getElementById('categoryFilter');
+    const categoryFilter = document.getElementById("categoryFilter");
     if (categoryFilter) {
       categoryFilter.innerHTML = '<option value="">All Categories</option>';
-      categories.forEach(category => {
-        const option = document.createElement('option');
+      categories.forEach((category) => {
+        const option = document.createElement("option");
         option.value = category.id;
         option.textContent = category.name;
         categoryFilter.appendChild(option);
       });
     }
   } catch (error) {
-    console.error('Error loading categories:', error);
+    console.error("Error loading categories:", error);
   }
 }
 
@@ -24,20 +24,20 @@ let brandsList = [];
 
 // --- BRAND FETCH ---
 async function loadBrandsCarousel() {
-    try {
-        const res = await fetch("../api/brands.php");
-        const json = await res.json();
-        brandsList = (json.data || []).filter(brand => brand.logo);
-        renderBrandMarquee();
-        const carouselSection = document.querySelector('.brands-carousel-section');
-        if (carouselSection) {
-          carouselSection.style.display = brandsList.length > 0 ? 'block' : 'none';
-        }
-    } catch (error) {
-        console.error('Error loading brands carousel:', error);
-        const carouselSection = document.querySelector('.brands-carousel-section');
-        if (carouselSection) carouselSection.style.display = 'none';
+  try {
+    const res = await fetch("../api/brands.php");
+    const json = await res.json();
+    brandsList = (json.data || []).filter((brand) => brand.logo);
+    renderBrandMarquee();
+    const carouselSection = document.querySelector(".brands-carousel-section");
+    if (carouselSection) {
+      carouselSection.style.display = brandsList.length > 0 ? "block" : "none";
     }
+  } catch (error) {
+    console.error("Error loading brands carousel:", error);
+    const carouselSection = document.querySelector(".brands-carousel-section");
+    if (carouselSection) carouselSection.style.display = "none";
+  }
 }
 
 // --- PRODUCT FETCH ---
@@ -46,20 +46,20 @@ let currentPage = 1;
 let totalProducts = 0;
 let currentProducts = [];
 
-async function fetchProducts(page = 1, search = '', category = '') {
+async function fetchProducts(page = 1, search = "", category = "") {
   try {
     const res = await fetch("../api/products.php");
     const json = await res.json();
     let allData = json.data || [];
     // Filter by category
-    if (category) allData = allData.filter(p => p.category_id == category);
+    if (category) allData = allData.filter((p) => p.category_id == category);
     // Filter by search
     if (search) {
       const searchLower = search.toLowerCase();
-      allData = allData.filter(product => {
-        const productName = product.product_name?.toLowerCase() || '';
-        const categoryName = product.category_name?.toLowerCase() || '';
-        const brandName = product.brand_name?.toLowerCase() || '';
+      allData = allData.filter((product) => {
+        const productName = product.product_name?.toLowerCase() || "";
+        const categoryName = product.category_name?.toLowerCase() || "";
+        const brandName = product.brand_name?.toLowerCase() || "";
         return (
           productName.includes(searchLower) ||
           categoryName.includes(searchLower) ||
@@ -69,8 +69,8 @@ async function fetchProducts(page = 1, search = '', category = '') {
     }
     // Custom sort: products with 'gift' in category name first, then by created_at desc
     allData.sort((a, b) => {
-      const aGift = (a.category_name || '').toLowerCase().includes('gift');
-      const bGift = (b.category_name || '').toLowerCase().includes('gift');
+      const aGift = (a.category_name || "").toLowerCase().includes("gift");
+      const bGift = (b.category_name || "").toLowerCase().includes("gift");
       if (aGift && !bGift) return -1;
       if (!aGift && bGift) return 1;
       // If both or neither, sort by created_at desc
@@ -82,11 +82,10 @@ async function fetchProducts(page = 1, search = '', category = '') {
     // Slice after sorting the entire data
     return allData.slice(from, to);
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     throw error;
   }
 }
-
 
 async function initializeApp() {
   try {
@@ -101,25 +100,25 @@ async function initializeApp() {
 }
 
 function renderBrandMarquee() {
-    const marquee = document.getElementById('brandsMarquee');
-    if (!marquee || brandsList.length === 0) return;
-    
-    marquee.innerHTML = '';
-    
-    // Duplicate the list for seamless looping
-    const fullList = brandsList.concat(brandsList);
-    
-    for (const brand of fullList) {
-        const brandItem = document.createElement('div');
-        brandItem.className = 'brand-item';
-        brandItem.innerHTML = `
+  const marquee = document.getElementById("brandsMarquee");
+  if (!marquee || brandsList.length === 0) return;
+
+  marquee.innerHTML = "";
+
+  // Duplicate the list for seamless looping
+  const fullList = brandsList.concat(brandsList);
+
+  for (const brand of fullList) {
+    const brandItem = document.createElement("div");
+    brandItem.className = "brand-item";
+    brandItem.innerHTML = `
             <div class="brand-logo-wrapper">
                 <img src="data:image/png;base64,${brand.logo}" alt="${brand.name}" title="${brand.name}" loading="lazy">
             </div>
             <span class="brand-name-label">${brand.name}</span>
         `;
-        marquee.appendChild(brandItem);
-    }
+    marquee.appendChild(brandItem);
+  }
 }
 
 async function fetchProducts(page = 1, search = "", category = "") {
@@ -128,14 +127,14 @@ async function fetchProducts(page = 1, search = "", category = "") {
     const json = await res.json();
     let allData = json.data || [];
     // Filter by category
-    if (category) allData = allData.filter(p => p.category_id == category);
+    if (category) allData = allData.filter((p) => p.category_id == category);
     // Filter by search
     if (search) {
       const searchLower = search.toLowerCase();
-      allData = allData.filter(product => {
-        const productName = product.product_name?.toLowerCase() || '';
-        const categoryName = product.category_name?.toLowerCase() || '';
-        const brandName = product.brand_name?.toLowerCase() || '';
+      allData = allData.filter((product) => {
+        const productName = product.product_name?.toLowerCase() || "";
+        const categoryName = product.category_name?.toLowerCase() || "";
+        const brandName = product.brand_name?.toLowerCase() || "";
         return (
           productName.includes(searchLower) ||
           categoryName.includes(searchLower) ||
@@ -145,8 +144,8 @@ async function fetchProducts(page = 1, search = "", category = "") {
     }
     // Custom sort: products with 'gift' in category name first, then by created_at desc
     allData.sort((a, b) => {
-      const aGift = (a.category_name || '').toLowerCase().includes('gift');
-      const bGift = (b.category_name || '').toLowerCase().includes('gift');
+      const aGift = (a.category_name || "").toLowerCase().includes("gift");
+      const bGift = (b.category_name || "").toLowerCase().includes("gift");
       if (aGift && !bGift) return -1;
       if (!aGift && bGift) return 1;
       // If both or neither, sort by created_at desc
@@ -158,7 +157,7 @@ async function fetchProducts(page = 1, search = "", category = "") {
     // Slice after sorting the entire data
     return allData.slice(from, to);
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error("Error fetching products:", error);
     throw error;
   }
 }
@@ -170,11 +169,12 @@ async function fetchAndRenderProducts(page = 1) {
   const resultsCount = document.getElementById("resultsCount");
   const search = searchInput ? searchInput.value.trim() : "";
   const category = categoryFilter ? categoryFilter.value : "";
-  productsGrid.innerHTML = '<div class="loading">Loading...</div>';  try {
+  productsGrid.innerHTML = '<div class="loading">Loading...</div>';
+  try {
     const products = await fetchProducts(page, search, category);
     renderProducts(products);
     renderPagination();
-    
+
     resultsCount.textContent = `Showing ${products.length} of ${totalProducts} products`;
   } catch (e) {
     console.error("Error fetching products:", e);
@@ -222,29 +222,47 @@ function renderProducts(products) {
       // Price/MRP logic
       let priceHtml = "-";
       let priceValue = product.price ? product.price : product.mrp;
-      let priceLabel = product.price ? "(+ GST)" : product.mrp ? "(incl. GST)" : "";
+      let priceLabel = product.price
+        ? "(+ GST)"
+        : product.mrp
+        ? "(incl. GST)"
+        : "";
       if (priceValue) {
         if (product.product_discount && product.product_discount > 0) {
-          const discounted = Math.round(priceValue * (1 - product.product_discount / 100));
+          const discounted = Math.round(
+            priceValue * (1 - product.product_discount / 100)
+          );
           priceHtml = `
-            <span class='product-price-original' style='text-decoration:line-through;color:#888;font-size:0.80em;'>₹${priceValue}</span>
-            <span class='product-price-discounted'>₹${discounted} <span style='font-size:0.80em;color:#888;'>${priceLabel}</span></span>
-            <span class='product-offer'>${product.product_discount}% OFF</span>
+          <div class='product-price-line'>
+            <div>
+             <span class='product-price-original' style='text-decoration:line-through;color:#888;font-size:0.80em;'>₹${priceValue}</span>
+             <span class='product-price-discounted'>₹${discounted} <span style='font-size:0.80em;color:#888;'>${priceLabel}</span></span>
+            </div>
+            <div>
+             <span class='product-offer'>${product.product_discount}% OFF</span>
+            </div>
+          </div>
           `;
         } else {
           priceHtml = `<span class='product-price'>₹${priceValue} <span style='font-size:0.75em;color:#888;'>${priceLabel}</span></span>`;
         }
       }
       return `
-        <div class="product-card" data-category="${product.category_id}" onclick="openProductModal(${index})">
+        <div class="product-card" data-category="${
+          product.category_id
+        }" onclick="openProductModal(${index})">
           <div class="product-image">
-            <img src="data:image/png;base64,${product.product_image}" alt="${product.product_name}" style="width:100%;height:100%;object-fit:cover;" />
+            <img src="data:image/png;base64,${product.product_image}" alt="${
+        product.product_name
+      }" style="width:100%;height:100%;object-fit:cover;" />
           </div>
           <div class="product-info">
             <h3 class="product-name">${highlightedName}</h3>
             <div class="product-brand-moq">
               <span class="product-brand">${highlightedBrand}</span>
-              <span class="product-moq">MOQ: ${(product.product_moq || 1).toLocaleString()}</span>
+              <span class="product-moq">MOQ: ${(
+                product.product_moq || 1
+              ).toLocaleString()}</span>
             </div>
             <div class="product-price-line">
               ${priceHtml}
@@ -264,11 +282,16 @@ function updateModalContent() {
   setTimeout(() => {
     modalImage.src = `data:image/png;base64,${product.product_image}`;
     modalImage.alt = product.product_name;
-    document.getElementById("modalProductName").textContent = product.product_name;
-    document.getElementById("modalProductCategory").textContent = product.category_name || "Unknown Category";
-    document.getElementById("modalProductBrand").textContent = product.brand_name || "Unknown Brand";
+    document.getElementById("modalProductName").textContent =
+      product.product_name;
+    document.getElementById("modalProductCategory").textContent =
+      product.category_name || "Unknown Category";
+    document.getElementById("modalProductBrand").textContent =
+      product.brand_name || "Unknown Brand";
     // Price/MRP logic
-    const originalPriceElement = document.getElementById("modalProductPriceOriginal");
+    const originalPriceElement = document.getElementById(
+      "modalProductPriceOriginal"
+    );
     const discountedPriceElement = document.getElementById("modalProductPrice");
     const discountBadge = document.getElementById("modalProductDiscount");
     let priceLabel = "";
@@ -280,13 +303,19 @@ function updateModalContent() {
       priceValue = product.mrp;
       priceLabel = "(including GST)";
     }
-    if (product.product_discount && product.product_discount > 0 && priceValue) {
+    if (
+      product.product_discount &&
+      product.product_discount > 0 &&
+      priceValue
+    ) {
       // Show original price with strikethrough
       originalPriceElement.textContent = `₹${priceValue}`;
       originalPriceElement.style.display = "inline-block";
       originalPriceElement.style.textDecoration = "line-through";
       originalPriceElement.style.color = "#888";
-      const discountedPrice = Math.round(priceValue * (1 - product.product_discount / 100));
+      const discountedPrice = Math.round(
+        priceValue * (1 - product.product_discount / 100)
+      );
       discountedPriceElement.textContent = `₹${discountedPrice} ${priceLabel}`;
       discountedPriceElement.style.color = "#2563eb";
       discountBadge.textContent = `${product.product_discount}% OFF`;
@@ -303,11 +332,14 @@ function updateModalContent() {
     }
     // Display individual product MOQ
     const productMOQ = product.product_moq || 1;
-    document.getElementById("modalProductMOQ").textContent = productMOQ.toLocaleString();
+    document.getElementById("modalProductMOQ").textContent =
+      productMOQ.toLocaleString();
     // Generate and display simple numeric product ID (1-based)
-    document.getElementById("modalProductId").textContent = product.id || (currentProductIndex + 1);
+    document.getElementById("modalProductId").textContent =
+      product.id || currentProductIndex + 1;
     // Description
-    document.getElementById("modalProductDescription").innerHTML = formatDescriptionAsBullets(product.product_description);
+    document.getElementById("modalProductDescription").innerHTML =
+      formatDescriptionAsBullets(product.product_description);
     modalImage.style.opacity = "1";
   }, 10);
   // Update navigation buttons
@@ -403,16 +435,22 @@ function setupModalTouchEvents() {
     modalContent.addEventListener("touchstart", handleTouchStart, {
       passive: true,
     });
-    modalContent.addEventListener("touchend", handleTouchEnd, { passive: true });
+    modalContent.addEventListener("touchend", handleTouchEnd, {
+      passive: true,
+    });
     modalContent.addEventListener("touchmove", handleTouchMove, {
       passive: false,
     });
   }
 
   if (modalBody) {
-    modalBody.addEventListener("touchstart", handleTouchStart, { passive: true });
+    modalBody.addEventListener("touchstart", handleTouchStart, {
+      passive: true,
+    });
     modalBody.addEventListener("touchend", handleTouchEnd, { passive: true });
-    modalBody.addEventListener("touchmove", handleTouchMove, { passive: false });
+    modalBody.addEventListener("touchmove", handleTouchMove, {
+      passive: false,
+    });
   }
 
   touchEventsAttached = true;
@@ -1063,11 +1101,18 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function formatDescriptionAsBullets(description) {
-  if (!description) return '<span style="color:#888">No description available.</span>';
+  if (!description)
+    return '<span style="color:#888">No description available.</span>';
   // Split by line breaks, trim, filter out empty lines
-  const lines = description.split(/\r?\n/).map(line => line.trim()).filter(line => line.length > 0);
-  if (lines.length === 0) return '<span style="color:#888">No description available.</span>';
-  return '<ul class="modal-description-list">' +
-    lines.map(line => `<li>${line}</li>`).join('') +
-    '</ul>';
+  const lines = description
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+  if (lines.length === 0)
+    return '<span style="color:#888">No description available.</span>';
+  return (
+    '<ul class="modal-description-list">' +
+    lines.map((line) => `<li>${line}</li>`).join("") +
+    "</ul>"
+  );
 }
