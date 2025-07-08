@@ -218,35 +218,34 @@ function renderProducts(products) {
         : categoryName;
       const highlightedBrand = searchTerm
         ? highlightText(brandName, searchTerm)
-        : brandName;
-      // Price/MRP logic
+        : brandName;      // Generate discount badge for image overlay
+      const discountBadgeHtml = (product.product_discount && product.product_discount > 0) 
+        ? `<div class="product-discount-badge">${product.product_discount}% OFF</div>` 
+        : '';      // Price/MRP logic - clean implementation without discount badge in price
       let priceHtml = "-";
       let priceValue = product.price ? product.price : product.mrp;
+      let pricePrefix = product.price ? "Price: " : product.mrp ? "MRP: " : "";
       let priceLabel = product.price
         ? "(+ GST)"
         : product.mrp
-        ? "(incl. GST)"
+        ? "(Inc. GST)"
         : "";
+      
       if (priceValue) {
         if (product.product_discount && product.product_discount > 0) {
           const discounted = Math.round(
             priceValue * (1 - product.product_discount / 100)
           );
           priceHtml = `
-          <div class='product-price-line'>
             <div>
              <span class='product-price-original' style='text-decoration:line-through;color:#888;font-size:0.80em;'>₹${priceValue}</span>
-             <span class='product-price-discounted'>₹${discounted} <span style='font-size:0.80em;color:#888;'>${priceLabel}</span></span>
-            </div>
-            <div>
-             <span class='product-offer'>${product.product_discount}% OFF</span>
-            </div>
-          </div>
-          `;
+             <span class='product-price-discounted'>${pricePrefix}₹${discounted} <span style='font-size:0.80em;color:#888;'>${priceLabel}</span></span>
+            </div>`;
         } else {
-          priceHtml = `<span class='product-price'>₹${priceValue} <span style='font-size:0.75em;color:#888;'>${priceLabel}</span></span>`;
+          priceHtml = `<span class='product-price'>${pricePrefix}₹${priceValue} <span style='font-size:0.75em;color:#888;'>${priceLabel}</span></span>`;
         }
       }
+
       return `
         <div class="product-card" data-category="${
           product.category_id
@@ -255,6 +254,7 @@ function renderProducts(products) {
             <img src="data:image/png;base64,${product.product_image}" alt="${
         product.product_name
       }" style="width:100%;height:100%;object-fit:cover;" />
+            ${discountBadgeHtml}
           </div>
           <div class="product-info">
             <h3 class="product-name">${highlightedName}</h3>
@@ -263,8 +263,7 @@ function renderProducts(products) {
               <span class="product-moq">MOQ: ${(
                 product.product_moq || 1
               ).toLocaleString()}</span>
-            </div>
-            <div class="product-price-line">
+            </div>            <div class="product-price-line">
               ${priceHtml}
             </div>
           </div>
@@ -287,21 +286,23 @@ function updateModalContent() {
     document.getElementById("modalProductCategory").textContent =
       product.category_name || "Unknown Category";
     document.getElementById("modalProductBrand").textContent =
-      product.brand_name || "Unknown Brand";
-    // Price/MRP logic
+      product.brand_name || "Unknown Brand";    // Price/MRP logic
     const originalPriceElement = document.getElementById(
       "modalProductPriceOriginal"
     );
     const discountedPriceElement = document.getElementById("modalProductPrice");
     const discountBadge = document.getElementById("modalProductDiscount");
     let priceLabel = "";
+    let pricePrefix = "";
     let priceValue = null;
     if (product.price) {
       priceValue = product.price;
+      pricePrefix = "Price: ";
       priceLabel = "(+ GST)";
     } else if (product.mrp) {
       priceValue = product.mrp;
-      priceLabel = "(including GST)";
+      pricePrefix = "MRP: ";
+      priceLabel = "(Inc. GST)";
     }
     if (
       product.product_discount &&
@@ -309,20 +310,20 @@ function updateModalContent() {
       priceValue
     ) {
       // Show original price with strikethrough
-      originalPriceElement.textContent = `₹${priceValue}`;
+      originalPriceElement.textContent = `${pricePrefix}₹${priceValue}`;
       originalPriceElement.style.display = "inline-block";
       originalPriceElement.style.textDecoration = "line-through";
       originalPriceElement.style.color = "#888";
       const discountedPrice = Math.round(
         priceValue * (1 - product.product_discount / 100)
       );
-      discountedPriceElement.textContent = `₹${discountedPrice} ${priceLabel}`;
+      discountedPriceElement.textContent = `${pricePrefix}₹${discountedPrice} ${priceLabel}`;
       discountedPriceElement.style.color = "#2563eb";
       discountBadge.textContent = `${product.product_discount}% OFF`;
       discountBadge.style.display = "inline-block";
     } else if (priceValue) {
       originalPriceElement.style.display = "none";
-      discountedPriceElement.textContent = `₹${priceValue} ${priceLabel}`;
+      discountedPriceElement.textContent = `${pricePrefix}₹${priceValue} ${priceLabel}`;
       discountedPriceElement.style.color = "#1f2937";
       discountBadge.style.display = "none";
     } else {
