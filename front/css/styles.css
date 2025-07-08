@@ -2639,6 +2639,9 @@ select:focus {
   margin-top: 0.5rem;
   flex-wrap: wrap;
 }
+.modal-price-row span {
+  font-size: 0.85;
+}
 
 .price-amount-original {
   font-size: 0.8rem;
@@ -2649,7 +2652,7 @@ select:focus {
 }
 
 .price-amount {
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   font-weight: 500;
   color: #1f2937;
 }
@@ -2705,7 +2708,7 @@ select:focus {
 }
 
 .price-amount {
-  font-size: 1.5rem;
+  font-size: 0.90rem;
   font-weight: 800;
   color: #1f2937;
 }
@@ -2901,7 +2904,7 @@ select:focus {
   }
   
   .price-amount {
-    font-size: 1.1rem;
+    font-size: 0.95rem;
   }
   
   .discount-badge {
