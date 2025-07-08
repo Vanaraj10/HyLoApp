@@ -310,7 +310,7 @@ function updateModalContent() {
       priceValue
     ) {
       // Show original price with strikethrough
-      originalPriceElement.textContent = `${pricePrefix}₹${priceValue}`;
+      originalPriceElement.textContent = `₹${priceValue}`;
       originalPriceElement.style.display = "inline-block";
       originalPriceElement.style.textDecoration = "line-through";
       originalPriceElement.style.color = "#888";
