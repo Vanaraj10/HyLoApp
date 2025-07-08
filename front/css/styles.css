@@ -930,6 +930,32 @@ small {
   width: 100%;
 }
 
+.product-price-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.price-left {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.price-right {
+  display: flex;
+  align-items: center;
+}
+
+.product-price-prefix {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+  margin: 0;
+}
+
 .product-price {
   font-size: 0.95rem;
   font-weight: 700;
@@ -949,6 +975,13 @@ small {
   font-size: 0.95rem;
   font-weight: 700;
   color: #2563eb;
+  margin: 0;
+}
+
+.product-price-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
   margin: 0;
 }
 
@@ -1586,8 +1619,12 @@ small {
   .product-moq {
     font-size: 0.7rem;
   }
-    .product-price {
+  .product-price {
     font-size: 0.9rem;
+  }
+  
+  .product-price-prefix {
+    font-size: 0.8rem;
   }
   
   .product-price-original {
@@ -1596,6 +1633,10 @@ small {
   
   .product-price-discounted {
     font-size: 0.9rem;
+  }
+  
+  .product-price-label {
+    font-size: 0.7rem;
   }
   
   .product-offer {
@@ -1638,8 +1679,12 @@ small {
   .product-moq {
     font-size: 0.65rem;
   }
-    .product-price {
+  .product-price {
     font-size: 0.85rem;
+  }
+  
+  .product-price-prefix {
+    font-size: 0.75rem;
   }
   
   .product-price-original {
@@ -1648,6 +1693,10 @@ small {
   
   .product-price-discounted {
     font-size: 0.85rem;
+  }
+  
+  .product-price-label {
+    font-size: 0.65rem;
   }
   
   .product-offer {
@@ -1675,8 +1724,12 @@ small {
   .product-moq {
     font-size: 0.6rem;
   }
-    .product-price {
+  .product-price {
     font-size: 0.8rem;
+  }
+  
+  .product-price-prefix {
+    font-size: 0.7rem;
   }
   
   .product-price-original {
@@ -1685,6 +1738,10 @@ small {
   
   .product-price-discounted {
     font-size: 0.8rem;
+  }
+  
+  .product-price-label {
+    font-size: 0.6rem;
   }
   
   .product-offer {
@@ -2637,7 +2694,8 @@ select:focus {
   align-items: center;
   gap: 0.75rem;
   margin-top: 0.5rem;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  width: 100%;
 }
 .modal-price-row span {
   font-size: 0.85;
@@ -2655,6 +2713,76 @@ select:focus {
   font-size: 0.85rem;
   font-weight: 500;
   color: #1f2937;
+  width: 100%;
+  display: block;
+}
+
+.modal-price-prefix {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.modal-price-original {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: line-through;
+}
+
+.modal-price-normal {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.modal-price-discounted {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #2563eb;
+}
+
+.modal-price-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.modal-price-container {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center;
+  width: 100% !important;
+  margin: 0.25rem 0;
+  min-width: 0;
+}
+
+.modal-price-left {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+  flex: 1;
+  text-align: left;
+  min-width: 0;
+}
+
+.modal-price-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end !important;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+
+.modal-offer {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #dc2626;
+  background: none;
+  padding: 0;
+  border: none;
 }
 
 .discount-badge {
@@ -2894,17 +3022,39 @@ select:focus {
   .brand-text, .category-text {
     font-size: 0.7rem;
   }
-    .modal-price-row {
-    flex-wrap: wrap;
-    gap: 0.5rem;
+  .modal-price-row {
+    flex-wrap: nowrap;
+    gap: 0.3rem;
   }
-  
-  .price-amount-original {
+    .price-amount-original {
     font-size: 0.9rem;
   }
   
   .price-amount {
     font-size: 0.95rem;
+  }
+  .modal-price-prefix {
+    font-size: 0.8rem;
+  }
+  
+  .modal-price-original {
+    font-size: 0.75rem;
+  }
+  
+  .modal-price-normal {
+    font-size: 0.9rem;
+  }
+  
+  .modal-price-discounted {
+    font-size: 0.9rem;
+  }
+  
+  .modal-price-label {
+    font-size: 0.7rem;
+  }
+  
+  .modal-offer {
+    font-size: 0.6rem;
   }
   
   .discount-badge {

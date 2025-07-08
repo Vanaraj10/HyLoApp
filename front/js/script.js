@@ -224,25 +224,35 @@ function renderProducts(products) {
         : '';      // Price/MRP logic - clean implementation without discount badge in price
       let priceHtml = "-";
       let priceValue = product.price ? product.price : product.mrp;
-      let pricePrefix = product.price ? "Price: " : product.mrp ? "MRP: " : "";
+      let pricePrefix = product.price ? "Price:" : product.mrp ? "MRP:" : "";
       let priceLabel = product.price
         ? "(+ GST)"
         : product.mrp
         ? "(Inc. GST)"
         : "";
       
-      if (priceValue) {
-        if (product.product_discount && product.product_discount > 0) {
+      if (priceValue) {        if (product.product_discount && product.product_discount > 0) {
           const discounted = Math.round(
             priceValue * (1 - product.product_discount / 100)
           );
           priceHtml = `
-            <div>
-             <span class='product-price-original' style='text-decoration:line-through;color:#888;font-size:0.80em;'>₹${priceValue}</span>
-             <span class='product-price-discounted'>${pricePrefix}₹${discounted} <span style='font-size:0.80em;color:#888;'>${priceLabel}</span></span>
+            <div class="product-price-container">
+              <div class="price-left">
+                <span class='product-price-prefix'>${pricePrefix}</span>
+                <span class='product-price-original'>₹${priceValue}</span>
+                <span class='product-price-discounted'>₹${discounted}</span>
+                <span class='product-price-label'>${priceLabel}</span>
+              </div>
             </div>`;
         } else {
-          priceHtml = `<span class='product-price'>${pricePrefix}₹${priceValue} <span style='font-size:0.75em;color:#888;'>${priceLabel}</span></span>`;
+          priceHtml = `
+            <div class="product-price-container">
+              <div class="price-left">
+                <span class='product-price-prefix'>${pricePrefix}</span>
+                <span class='product-price'>₹${priceValue}</span>
+                <span class='product-price-label'>${priceLabel}</span>
+              </div>
+            </div>`;
         }
       }
 
@@ -291,40 +301,50 @@ function updateModalContent() {
       "modalProductPriceOriginal"
     );
     const discountedPriceElement = document.getElementById("modalProductPrice");
-    const discountBadge = document.getElementById("modalProductDiscount");
-    let priceLabel = "";
+    const discountBadge = document.getElementById("modalProductDiscount");    let priceLabel = "";
     let pricePrefix = "";
     let priceValue = null;
     if (product.price) {
       priceValue = product.price;
-      pricePrefix = "Price: ";
+      pricePrefix = "Price:";
       priceLabel = "(+ GST)";
     } else if (product.mrp) {
       priceValue = product.mrp;
-      pricePrefix = "MRP: ";
+      pricePrefix = "MRP:";
       priceLabel = "(Inc. GST)";
-    }
-    if (
+    }    if (
       product.product_discount &&
       product.product_discount > 0 &&
       priceValue
     ) {
-      // Show original price with strikethrough
-      originalPriceElement.textContent = `₹${priceValue}`;
-      originalPriceElement.style.display = "inline-block";
-      originalPriceElement.style.textDecoration = "line-through";
-      originalPriceElement.style.color = "#888";
+      // Hide the separate original price element since we'll include it in the container
+      originalPriceElement.style.display = "none";
       const discountedPrice = Math.round(
         priceValue * (1 - product.product_discount / 100)
       );
-      discountedPriceElement.textContent = `${pricePrefix}₹${discountedPrice} ${priceLabel}`;
-      discountedPriceElement.style.color = "#2563eb";
-      discountBadge.textContent = `${product.product_discount}% OFF`;
-      discountBadge.style.display = "inline-block";
+      discountedPriceElement.innerHTML = `
+        <div class="modal-price-container">
+          <div class="modal-price-left">
+            <span class="modal-price-prefix">${pricePrefix}</span>
+            <span class="modal-price-original">₹${priceValue}</span>
+            <span class="modal-price-discounted">₹${discountedPrice}</span>
+            <span class="modal-price-label">${priceLabel}</span>
+          </div>
+          <div class="modal-price-right">
+            <span class="modal-offer">${product.product_discount}% OFF</span>
+          </div>
+        </div>`;
+      discountBadge.style.display = "none"; // Hide the separate badge since it's now in the price section
     } else if (priceValue) {
       originalPriceElement.style.display = "none";
-      discountedPriceElement.textContent = `${pricePrefix}₹${priceValue} ${priceLabel}`;
-      discountedPriceElement.style.color = "#1f2937";
+      discountedPriceElement.innerHTML = `
+        <div class="modal-price-container">
+          <div class="modal-price-left">
+            <span class="modal-price-prefix">${pricePrefix}</span>
+            <span class="modal-price-normal">₹${priceValue}</span>
+            <span class="modal-price-label">${priceLabel}</span>
+          </div>
+        </div>`;
       discountBadge.style.display = "none";
     } else {
       originalPriceElement.style.display = "none";
