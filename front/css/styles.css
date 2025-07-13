@@ -944,13 +944,8 @@ small {
   flex-wrap: wrap;
 }
 
-.price-right {
-  display: flex;
-  align-items: center;
-}
-
 .product-price-prefix {
-  font-size: 0.85rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: #6b7280;
   margin: 0;
@@ -986,8 +981,8 @@ small {
 }
 
 .product-offer {
-  font-size: 0.65rem;
-  font-weight: 600;
+  font-size: 0.35rem;
+  font-weight: 400;
   color: #dc2626;
   background: none;
   padding: 0;
@@ -1430,7 +1425,7 @@ small {
   align-items: center;
   margin: 2rem 0;
   gap: 1rem;
-  background-color: #f2fffe
+  background-color: #ffffff
 }
 
 .pagination {
@@ -1565,7 +1560,7 @@ small {
 /* Mobile Responsive Design for Product Grid */
 @media (max-width: 1400px) {
   .products-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 1.8rem;
   }
 }
@@ -1624,7 +1619,7 @@ small {
   }
   
   .product-price-prefix {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
   }
   
   .product-price-original {
@@ -1640,7 +1635,7 @@ small {
   }
   
   .product-offer {
-    font-size: 0.65rem;
+    font-size: 0.35rem;
   }
 }
 
@@ -1684,7 +1679,7 @@ small {
   }
   
   .product-price-prefix {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
   }
   
   .product-price-original {
@@ -1700,7 +1695,7 @@ small {
   }
   
   .product-offer {
-    font-size: 0.6rem;
+    font-size: 0.35rem;
   }
 }
 
@@ -1729,7 +1724,7 @@ small {
   }
   
   .product-price-prefix {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
   }
   
   .product-price-original {
@@ -1745,7 +1740,7 @@ small {
   }
   
   .product-offer {
-    font-size: 0.55rem;
+    font-size: 0.35rem;
   }
 }
 
@@ -3930,10 +3925,9 @@ section{
 
 /* Discount OFF styling */
 .product-offer, .modal-offer {
-  font-size: 1.1rem;
-  font-weight: 700;
+  font-size: 0.8rem;
+  font-weight: 500;
   color: #dc2626;
-  letter-spacing: 0.5px;
 }
 
 /* Product ID styling */
@@ -3948,7 +3942,7 @@ section{
 }
 
 .off-big {
-  font-size: 1.25em;
+  font-size: 0.5em;
   font-weight: 700;
   letter-spacing: 0.5px;
 }

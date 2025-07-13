@@ -244,9 +244,7 @@ function renderProducts(products) {
                 <span class='product-price-discounted'>₹${discounted}</span>
                 <span class='product-price-label'>${priceLabel}</span>
               </div>
-              <div class="price-right">
-                <span class='product-offer'>${product.product_discount}% <span class='off-big'>OFF</span></span>
-              </div>
+                <span class='product-offer'>${product.product_discount}% OFF</span>
             </div>`;
         } else {
           priceHtml = `
