@@ -231,7 +231,8 @@ function renderProducts(products) {
         ? "(Inc. GST)"
         : "";
       
-      if (priceValue) {        if (product.product_discount && product.product_discount > 0) {
+      if (priceValue) {
+        if (product.product_discount && product.product_discount > 0) {
           const discounted = Math.round(
             priceValue * (1 - product.product_discount / 100)
           );
@@ -242,6 +243,9 @@ function renderProducts(products) {
                 <span class='product-price-original'>₹${priceValue}</span>
                 <span class='product-price-discounted'>₹${discounted}</span>
                 <span class='product-price-label'>${priceLabel}</span>
+              </div>
+              <div class="price-right">
+                <span class='product-offer'>${product.product_discount}% <span class='off-big'>OFF</span></span>
               </div>
             </div>`;
         } else {
@@ -331,7 +335,7 @@ function updateModalContent() {
             <span class="modal-price-label">${priceLabel}</span>
           </div>
           <div class="modal-price-right">
-            <span class="modal-offer">${product.product_discount}% OFF</span>
+            <span class="modal-offer">${product.product_discount}% <span class='off-big'>OFF</span></span>
           </div>
         </div>`;
       discountBadge.style.display = "none"; // Hide the separate badge since it's now in the price section
