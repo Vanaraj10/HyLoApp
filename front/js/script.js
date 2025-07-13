@@ -48,12 +48,12 @@ let currentProducts = [];
 
 async function fetchProducts(page = 1, search = "", category = "") {
   try {
-    const res = await fetch("../api/products.php");
+    const res = await fetch(`../api/products.php?page=${page}&limit=${PAGE_SIZE}&search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}`);
     const json = await res.json();
     let allData = json.data || [];
-    // Filter by category
+    // Filter by category (if not handled by backend)
     if (category) allData = allData.filter((p) => p.category_id == category);
-    // Filter by search
+    // Filter by search (if not handled by backend)
     if (search) {
       const searchLower = search.toLowerCase();
       allData = allData.filter((product) => {
@@ -77,10 +77,8 @@ async function fetchProducts(page = 1, search = "", category = "") {
       return new Date(b.created_at) - new Date(a.created_at);
     });
     totalProducts = allData.length;
-    const from = (page - 1) * PAGE_SIZE;
-    const to = from + PAGE_SIZE;
-    // Slice after sorting the entire data
-    return allData.slice(from, to);
+    // Only return up to PAGE_SIZE products (defensive, in case backend returns more)
+    return allData.slice(0, PAGE_SIZE);
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;
@@ -123,12 +121,12 @@ function renderBrandMarquee() {
 
 async function fetchProducts(page = 1, search = "", category = "") {
   try {
-    const res = await fetch("../api/products.php");
+    const res = await fetch(`../api/products.php?page=${page}&limit=${PAGE_SIZE}&search=${encodeURIComponent(search)}&category=${encodeURIComponent(category)}`);
     const json = await res.json();
     let allData = json.data || [];
-    // Filter by category
+    // Filter by category (if not handled by backend)
     if (category) allData = allData.filter((p) => p.category_id == category);
-    // Filter by search
+    // Filter by search (if not handled by backend)
     if (search) {
       const searchLower = search.toLowerCase();
       allData = allData.filter((product) => {
@@ -152,10 +150,8 @@ async function fetchProducts(page = 1, search = "", category = "") {
       return new Date(b.created_at) - new Date(a.created_at);
     });
     totalProducts = allData.length;
-    const from = (page - 1) * PAGE_SIZE;
-    const to = from + PAGE_SIZE;
-    // Slice after sorting the entire data
-    return allData.slice(from, to);
+    // Only return up to PAGE_SIZE products (defensive, in case backend returns more)
+    return allData.slice(0, PAGE_SIZE);
   } catch (error) {
     console.error("Error fetching products:", error);
     throw error;
